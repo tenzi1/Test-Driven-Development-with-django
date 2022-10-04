@@ -58,7 +58,7 @@ class NewVisitorTest(unittest.TestCase):
         
         #page updates again and shows both items on list
         self.check_for_row_in_list_table('1: Clean room')
-        self.check_for_row_in_list_table('2: Cook Food')
+        # self.check_for_row_in_list_table('2: Cook Food')
 
         self.fail('Finish the test!')
 
