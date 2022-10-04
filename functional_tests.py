@@ -28,7 +28,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         #user visits homepage
-        self.driver.get('http://localhost:8000')
+        self.driver.get('http://localhost:8000/')
         #user gets homepage with title 'To-Do' in it
         self.assertIn('To-Do', self.driver.title)
         #user notices header mention to-do lists.
@@ -53,7 +53,8 @@ class NewVisitorTest(unittest.TestCase):
         table = self.driver.find_element(By.ID, 'id_list_table')
         rows = table.find_elements(By.TAG_NAME, 'tr')
         self.assertTrue(
-            any(row.text == '1: Clean room' for row in rows )
+            any(row.text == '1: Clean room' for row in rows ),
+            "New to-do item did not appear in table"
         )
         self.fail('Finish the test!')
 
