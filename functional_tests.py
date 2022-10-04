@@ -26,6 +26,12 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
 
+    #helper method
+    def check_for_row_in_list_table(self, row_text):
+        table = self.driver.find_element(By.ID, "id_list_table")
+        rows = table.find_elements(By.TAG_NAME, 'tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_can_start_a_list_and_retrieve_it_later(self):
         #user visits homepage
         self.driver.get('http://localhost:8000/')
@@ -50,12 +56,10 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
         
-        table = self.driver.find_element(By.ID, 'id_list_table')
-        rows = table.find_elements(By.TAG_NAME, 'tr')
-        self.assertTrue(
-            any(row.text == '1: Clean room' for row in rows ),
-            "New to-do item did not appear in table"
-        )
+        #page updates again and shows both items on list
+        self.check_for_row_in_list_table('1: Clean room')
+        self.check_for_row_in_list_table('2: Cook Food')
+
         self.fail('Finish the test!')
 
 
