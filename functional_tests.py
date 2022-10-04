@@ -1,6 +1,9 @@
 # group of tests for Functional Testing
 import unittest
+import time
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
 
@@ -24,8 +27,34 @@ class NewVisitorTest(unittest.TestCase):
         self.driver.quit()
 
     def test_can_start_a_list_and_retrieve_it_later(self):
+        #user visits homepage
         self.driver.get('http://localhost:8000')
+        #user gets homepage with title 'To-Do' in it
         self.assertIn('To-Do', self.driver.title)
+        #user notices header mention to-do lists.
+        header_text = self.driver.find_element(By.TAG_NAME, "h1").text
+        self.assertIn('To-Do', header_text)
+        
+        #user is invited to enter a to-do iteme 
+        inputbox = self.driver.find_element(By.ID, 'id_new_item')
+        self.assertEqual(
+            inputbox.get_attribute('placeholder'), 
+            'Enter a to-do item'
+        )
+        
+        #user types "Clean room" into a text box
+        inputbox.send_keys('Clean room')
+
+        #when user hits enter, the page updates and now the page lists 
+        #"1: Clean room" as an item in to-do list table
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+        
+        table = self.driver.find_element(By.ID, 'id_list_table')
+        rows = table.find_elements(By.TAG_NAME, 'tr')
+        self.assertTrue(
+            any(row.text == '1: Clean room' for row in rows )
+        )
         self.fail('Finish the test!')
 
 
