@@ -1,6 +1,7 @@
 # group of tests for Functional Testing
 import unittest
 import time
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -19,7 +20,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 # driver.quit()
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.driver = webdriver.Firefox(service=Service(executable_path=GeckoDriverManager().install()))
 
@@ -34,7 +35,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         #user visits homepage
-        self.driver.get('http://localhost:8000/')
+        self.driver.get(self.live_server_url)
         #user gets homepage with title 'To-Do' in it
         self.assertIn('To-Do', self.driver.title)
         #user notices header mention to-do lists.
@@ -62,7 +63,4 @@ class NewVisitorTest(unittest.TestCase):
 
         self.fail('Finish the test!')
 
-
-if __name__ == '__main__':
-    unittest.main()
 
